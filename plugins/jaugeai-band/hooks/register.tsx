@@ -1,10 +1,9 @@
-import { atom, read, update } from 'claude-code'
 import type { EngineInterface, Register } from 'claude-code'
 
 import type { Service, Usage } from '../types'
 
-const usage = atom({ plugin: 'jaugeai-band', key: 'usage' } as const, null)
-const isHidden = atom({ plugin: 'jaugeai-band', key: 'isHidden' } as const, false)
+const usage = { plugin: 'jaugeai-band', key: 'usage' } as const
+const isHidden = { plugin: 'jaugeai-band', key: 'isHidden' } as const
 
 // Written by the JaugeAI app when it installs the band (ClaudeBand.swift);
 // left as is in the public plugin, which finds the folder from HOME.
@@ -108,7 +107,7 @@ async function load($: EngineInterface): Promise<Usage | null> {
 
 async function refresh($: EngineInterface) {
   const next = await load($)
-  await update($, usage, () => next)
+  await $.state.set(usage, next)
 }
 
 export const register: Register = on => {
@@ -121,8 +120,8 @@ export const register: Register = on => {
 
   // /jaugeai: brings the band back after its close button, or hides it.
   on('command.run', { command: 'jaugeai' }, async $ => {
-    const hidden = await read($, isHidden)
-    await update($, isHidden, () => !hidden)
+    const hidden = ((await $.state.get(isHidden)).value ?? false)
+    await $.state.set(isHidden, !hidden)
     await refresh($)
     const fr = await french($)
     return { text: hidden ? (fr ? 'Bandeau JaugeAI affiché.' : 'JaugeAI band shown.') : (fr ? 'Bandeau JaugeAI masqué.' : 'JaugeAI band hidden.') }
@@ -139,8 +138,8 @@ export const register: Register = on => {
   })
 
   on('ui.render', { component: 'AbovePrompt' }, async ($, e, next) => {
-    const u = (await read($, usage)) ?? (await load($))
-    if (e.props.hasSurvey || u === null || (await read($, isHidden))) return next(e)
+    const u = ((await $.state.get(usage)).value) ?? (await load($))
+    if (e.props.hasSurvey || u === null || (((await $.state.get(isHidden)).value ?? false))) return next(e)
 
     const { Box, Button, Text } = $.ui.resolve(e)
     const dim = !!u.stale
@@ -150,7 +149,7 @@ export const register: Register = on => {
         <Box>
           <Text dimColor>{u.hint}</Text>
           <Text>  </Text>
-          <Button key="hide" label="×" dimColor onPress={() => update($, isHidden, () => true)} />
+          <Button key="hide" label="×" dimColor onPress={() => $.state.set(isHidden, true)} />
         </Box>
       )
     }
@@ -177,7 +176,7 @@ export const register: Register = on => {
         {u.services.map(service)}
         {u.stale ? <Text dimColor>  · {fr ? 'relevé il y a' : 'read'} {u.stale} min{fr ? '' : ' ago'}</Text> : null}
         <Text>  </Text>
-        <Button key="hide" label="×" dimColor onPress={() => update($, isHidden, () => true)} />
+        <Button key="hide" label="×" dimColor onPress={() => $.state.set(isHidden, true)} />
       </Box>
     )
   })

@@ -39,6 +39,13 @@ JaugeAI Pro users can also turn the band on from the Mac app, without any comman
 
 The band refreshes every minute and after each turn. When the app has not updated the numbers for 20 minutes, the band dims and says how old they are. A limit at 95 % or more turns red. Text is in French when your `LANG` is French, English otherwise.
 
+## What the plugin hooks
+
+- `session.start`: registers the `/jaugeai` command and refreshes the numbers every minute.
+- `command.run` (only for `jaugeai`): shows or hides the band. It does not see or change other commands.
+- `prompt.submit` and `turn.complete`: refresh the numbers, then pass the event on unchanged.
+- `ui.render` on the area above the prompt: draws the band, or leaves the area as it is when hidden.
+
 ## Privacy
 
 The band only reads one local file written by the JaugeAI app: `~/Library/Application Support/AIjauge/mcp-payload.json`. It makes no network request and sends nothing anywhere. It does not read your conversations, code or credentials.

@@ -1,16 +1,28 @@
 {
   "name": "jaugeai",
-  "owner": { "name": "JaugeAI", "url": "https://jaugeai.com" },
-  "metadata": { "description": "JaugeAI plugins for Claude Code: see your AI subscription limits where you work." },
+  "owner": {
+    "name": "JaugeAI",
+    "url": "https://jaugeai.com"
+  },
+  "metadata": {
+    "description": "JaugeAI plugins for Claude Code: see your AI subscription limits where you work."
+  },
   "plugins": [
     {
       "name": "jaugeai-band",
       "source": "./plugins/jaugeai-band",
       "description": "Usage band above the Claude Code prompt: plan, tightest limit and reset time for Claude, Codex and Gemini. Requires JaugeAI for Mac (Pro).",
-      "version": "1.1.0",
+      "version": "1.1.1",
       "homepage": "https://jaugeai.com",
       "category": "productivity",
-      "keywords": ["usage", "limits", "rate limit", "quota", "subscription", "codex"]
+      "keywords": [
+        "usage",
+        "limits",
+        "rate limit",
+        "quota",
+        "subscription",
+        "codex"
+      ]
     }
   ]
 }

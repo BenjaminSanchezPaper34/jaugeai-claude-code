@@ -1,6 +1,6 @@
 {
   "name": "jaugeai-band",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "author": {
     "name": "JaugeAI",
     "url": "https://jaugeai.com"
@@ -16,7 +16,6 @@
     "codex",
     "mod"
   ],
-  "types": "./types/index.d.ts",
   "displayName": "JaugeAI band",
   "license": "MIT",
   "repository": "https://github.com/BenjaminSanchezPaper34/jaugeai-claude-code"
