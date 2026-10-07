@@ -44,10 +44,10 @@ export function resetIn(iso: string | undefined, now: number, fr = true): string
   if (!(ms > 0)) return null
   const minutes = Math.round(ms / 60000)
   const days = Math.floor(minutes / 1440)
-  if (days > 0) return `${days} ${fr ? 'j' : 'd'} ${Math.floor((minutes % 1440) / 60)} h`
-  const h = Math.floor(minutes / 60)
-  const m = minutes % 60
-  return h > 0 ? `${h} h ${String(m).padStart(2, '0')}` : `${m} min`
+  if (days > 0) return days + (fr ? ' j ' : ' d ') + Math.floor((minutes % 1440) / 60) + ' h'
+  const hours = Math.floor(minutes / 60)
+  const rest = minutes % 60
+  return hours > 0 ? hours + ' h ' + String(rest).padStart(2, '0') : rest + ' min'
 }
 
 export function services(p: Payload, now: number, fr = true): Service[] {
